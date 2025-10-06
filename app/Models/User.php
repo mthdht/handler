@@ -45,4 +45,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function organisations()
+    {
+        return $this->belongsToMany(Organisation::class);
+    }
 }

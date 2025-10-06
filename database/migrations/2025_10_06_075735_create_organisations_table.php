@@ -15,10 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
-            $table->string('logo');
-            $table->text('description');
+            $table->string('logo')->nullable();
+            $table->text('description')->nullable();
             $table->json('settings')->nullable();
-
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('website')->nullable();
+            $table->string('address')->nullable();
             $table->softDeletes();
             $table->foreignId('owner_id')->constrained('users');
             $table->timestamps();
