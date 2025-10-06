@@ -1,0 +1,6 @@
+{
+    "tasks": {
+        "queue": "php artisan queue:work --tries=2",
+        "vite": "npm run dev"
+    }
+}
