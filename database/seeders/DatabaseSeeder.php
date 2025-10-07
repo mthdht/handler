@@ -6,6 +6,7 @@ use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Organisation;
+use App\Models\Etablissement;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,7 +18,8 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         $mth = User::factory()
-            ->has(Organisation::factory()->count(3))
+            ->has(Organisation::factory(3)
+                ->has(Etablissement::factory(5)))
             ->create([
                 'name' => 'Mth',
                 'email' => 'email@gmail.com',

@@ -13,7 +13,20 @@ return new class extends Migration
     {
         Schema::create('etablissements', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('slug')->unique();
+            $table->string('logo')->nullable();
+            $table->text('description')->nullable();
+            $table->json('settings')->nullable();
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('website')->nullable();
+            $table->string('address')->nullable();
+            $table->softDeletes();
             $table->timestamps();
+
+            $table->foreignId('organisation_id')->constrained();
+            $table->index('slug');
         });
     }
 

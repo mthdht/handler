@@ -33,6 +33,11 @@ class Organisation extends Model
         return $this->belongsTo(User::class, 'owner_id');
     }
 
+    public function etablissements()
+    {
+        return $this->hasMany(Etablissement::class);
+    }
+
     public function getRouteKeyName()
     {
         return 'slug';

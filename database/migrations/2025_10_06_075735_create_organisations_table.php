@@ -23,8 +23,10 @@ return new class extends Migration
             $table->string('website')->nullable();
             $table->string('address')->nullable();
             $table->softDeletes();
-            $table->foreignId('owner_id')->constrained('users');
             $table->timestamps();
+
+            $table->foreignId('owner_id')->constrained('users');
+            $table->index('slug');
         });
     }
 
