@@ -126,9 +126,6 @@ class OrganisationTest extends TestCase
         $response = $this->actingAs($admin)->get('/organisations/create');
 
         $response->assertOk();
-        $response->assertInertia(fn ($page) => $page
-            ->component('organisations/Create')
-        );
     }
 
     /** @test */

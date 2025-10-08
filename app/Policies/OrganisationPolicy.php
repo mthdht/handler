@@ -29,7 +29,7 @@ class OrganisationPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user->can('manage organisations');
     }
 
     /**

@@ -27,7 +27,9 @@ class OrganisationController extends Controller
      */
     public function create()
     {
-        //
+        Gate::authorize('create', Organisation::class);
+        
+        return Inertia::render('organisations/Create');
     }
 
     /**
