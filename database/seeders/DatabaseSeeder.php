@@ -8,6 +8,9 @@ use Illuminate\Database\Seeder;
 use App\Models\Organisation;
 use App\Models\Etablissement;
 
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -17,12 +20,42 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
+        $adminRole = Role::create(['name' => 'admin']);
+        $recruteurRole = Role::create(['name' => 'recruteur']);
+        $candidatRole = Role::create(['name' => 'candidat']);
+
+        $manageOrga = Permission::create(['name' => 'manage organisations']);
+        $manageEtablissement = Permission::create(['name' => 'manage etablissements']);
+
+        $adminRole->givePermissionTo($manageOrga);
+        $adminRole->givePermissionTo($manageEtablissement);
+
         $mth = User::factory()
-            ->has(Organisation::factory(3)
-                ->has(Etablissement::factory(5)))
+            ->has(Organisation::factory(1)
+                ->has(Etablissement::factory(2)))
             ->create([
                 'name' => 'Mth',
-                'email' => 'email@gmail.com',
+                'email' => 'mth@gmail.com',
             ]);
+            
+            
+        $max = User::factory()
+            ->has(Organisation::factory(1)
+            ->has(Etablissement::factory(2)))
+            ->create([
+                'name' => 'Max',
+                'email' => 'max@gmail.com',
+            ]);
+            
+        $eric = User::factory()
+            ->has(Organisation::factory(1)
+                ->has(Etablissement::factory(2)))
+                ->create([
+                    'name' => 'Eric',
+                    'email' => 'eric@gmail.com',
+                ]);
+        
+        
+        $mth->assignRole($adminRole);
     }
 }
