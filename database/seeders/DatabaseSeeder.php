@@ -26,9 +26,14 @@ class DatabaseSeeder extends Seeder
 
         $manageOrga = Permission::create(['name' => 'manage organisations']);
         $manageEtablissement = Permission::create(['name' => 'manage etablissements']);
+        $viewOrga = Permission::create(['name' => 'view organisations']);
 
         $adminRole->givePermissionTo($manageOrga);
+        $adminRole->givePermissionTo($viewOrga);
         $adminRole->givePermissionTo($manageEtablissement);
+
+        $recruteurRole->givePermissionTo($viewOrga);
+        
 
         $mth = User::factory()
             ->has(Organisation::factory(1)
@@ -57,5 +62,7 @@ class DatabaseSeeder extends Seeder
         
         
         $mth->assignRole($adminRole);
+        $max->assignRole($recruteurRole);
+        $eric->assignRole($candidatRole);
     }
 }

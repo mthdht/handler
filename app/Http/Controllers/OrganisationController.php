@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreOrganisationRequest;
 use App\Http\Requests\UpdateOrganisationRequest;
 use App\Models\Organisation;
+use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Gate;
 
 class OrganisationController extends Controller
 {
@@ -13,7 +16,10 @@ class OrganisationController extends Controller
      */
     public function index()
     {
-        //
+        Gate::authorize('viewAny', Organisation::class);
+        
+        $organisations = Auth::user()->organisations;
+        return Inertia::render('organisations/Index', ['organisations' => $organisations]);
     }
 
     /**

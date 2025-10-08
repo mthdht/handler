@@ -59,6 +59,9 @@ class User extends Authenticatable
 
     public function etablissements()
     {
-        return $this->hasManythrough(Etablissement::class, Organisation::class);
+        return Etablissement::query()
+            ->whereHas('organisation.users', function ($query) {
+                $query->where('user_id', $this->id);
+            })->get();
     }
 }
