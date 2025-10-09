@@ -18,7 +18,12 @@ class OrganisationController extends Controller
     {
         Gate::authorize('viewAny', Organisation::class);
         
-        $organisations = Auth::user()->organisations;
+        $organisations = Auth::user()->organisations()
+            ->with('owner')
+            ->withCount('etablissements')
+            ->latest()
+            ->paginate(10);
+
         return Inertia::render('organisations/Index', ['organisations' => $organisations]);
     }
 
@@ -37,7 +42,20 @@ class OrganisationController extends Controller
      */
     public function store(StoreOrganisationRequest $request)
     {
-        //
+        Gate::authorize('create', Organisation::class);
+        
+        $organisation = Auth::user()->organisations()->create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'website' => $request->website,
+            'address' => $request->address,
+            'owner_id' => Auth::id(),
+        ]);
+
+        return redirect()->route('organisations.index')
+            ->with('success', 'Organisation créée avec succès.');
     }
 
     /**
@@ -45,7 +63,17 @@ class OrganisationController extends Controller
      */
     public function show(Organisation $organisation)
     {
-        //
+        Gate::authorize('show', $organisation);
+
+        $organisation->load([
+            'owner',
+            'establishments' => fn($query) => $query->latest(),
+            'users' 
+        ]);
+        
+        return Inertia::render('organisations/Show', [
+            'organisation' => $organisation
+        ]);
     }
 
     /**
@@ -53,7 +81,11 @@ class OrganisationController extends Controller
      */
     public function edit(Organisation $organisation)
     {
-        //
+        Gate::authorize('update', $organisation);
+        
+        return Inertia::render('organisations/Edit', [
+            'organisation' => $organisation
+        ]);
     }
 
     /**
@@ -61,7 +93,12 @@ class OrganisationController extends Controller
      */
     public function update(UpdateOrganisationRequest $request, Organisation $organisation)
     {
-        //
+        Gate::authorize('update', $organisation);
+        
+        $organisation->update($request->validated());
+
+        return redirect()->route('organisations.show', $organisation)
+            ->with('success', 'Organisation mise à jour avec succès.');
     }
 
     /**
@@ -69,6 +106,11 @@ class OrganisationController extends Controller
      */
     public function destroy(Organisation $organisation)
     {
-        //
+        $this->authorize('delete', $organisation);
+        
+        $organisation->delete();
+
+        return redirect()->route('organisations.index')
+            ->with('success', 'Organisation supprimée avec succès.');
     }
 }

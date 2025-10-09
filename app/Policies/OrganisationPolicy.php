@@ -21,7 +21,8 @@ class OrganisationPolicy
      */
     public function view(User $user, Organisation $organisation): bool
     {
-        return false;
+        return $user->can('view organisations') 
+            && $organisation->users()->where('user_id', $user->id)->exists();
     }
 
     /**
@@ -37,7 +38,8 @@ class OrganisationPolicy
      */
     public function update(User $user, Organisation $organisation): bool
     {
-        return false;
+        return $user->can('manage organisations')
+            && $organisation->users()->where('user_id', $user->id)->exists();
     }
 
     /**
@@ -45,7 +47,8 @@ class OrganisationPolicy
      */
     public function delete(User $user, Organisation $organisation): bool
     {
-        return false;
+        return $user->can('manage organisations')
+            && $organisation->users()->where('user_id', $user->id)->exists();
     }
 
     /**
@@ -53,7 +56,7 @@ class OrganisationPolicy
      */
     public function restore(User $user, Organisation $organisation): bool
     {
-        return false;
+        return $user->can('manage organisations');
     }
 
     /**

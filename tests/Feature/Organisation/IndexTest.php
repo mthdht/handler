@@ -52,7 +52,7 @@ class IndexTest extends TestCase
         $response->assertOk();
         $response->assertInertia(fn (Assert $page) => $page
             ->component('organisations/Index', false)
-            ->has('organisations', 2)
+            ->has('organisations.data', 2)
         );
     }
 
@@ -69,7 +69,7 @@ class IndexTest extends TestCase
         $response->assertOk();
         $response->assertInertia(fn ($page) => $page
         ->component('organisations/Index', false)
-            ->has('organisations', 1)
+            ->has('organisations.data', 1)
         );
     }
 
@@ -99,9 +99,9 @@ class IndexTest extends TestCase
 
         $response->assertOk();
         $response->assertInertia(fn ($page) => $page
-            ->has('organisations', 2)
-            ->where('organisations.0.id', $myOrg1->id)
-            ->where('organisations.1.id', $myOrg2->id)
+            ->has('organisations.data', 2)
+            ->where('organisations.data.0.id', $myOrg1->id)
+            ->where('organisations.data.1.id', $myOrg2->id)
         );
     }
 
