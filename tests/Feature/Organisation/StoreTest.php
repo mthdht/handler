@@ -140,10 +140,7 @@ class StoreTest extends TestCase
             'name' => 'Mon Entreprise',
         ]);
 
-        // Le slug devrait être incrémenté automatiquement
         $response->assertRedirect();
-        $this->assertDatabaseHas('organisations', [
-            'slug' => 'mon-entreprise-1',
-        ]);
+        $response->assertSessionHasErrors('name');
     }
 }

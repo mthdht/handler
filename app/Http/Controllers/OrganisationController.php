@@ -8,6 +8,7 @@ use App\Models\Organisation;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 
 class OrganisationController extends Controller
 {
@@ -24,7 +25,7 @@ class OrganisationController extends Controller
             ->latest()
             ->paginate(10);
 
-        return Inertia::render('organisations/Index', ['organisations' => $organisations]);
+        return Inertia::render('organisations/Index', ['organisations' => $organisations, 'test' => 'ok test']);
     }
 
     /**
@@ -46,6 +47,7 @@ class OrganisationController extends Controller
         
         $organisation = Auth::user()->organisations()->create([
             'name' => $request->name,
+            'slug' => Str::slug($request->name),
             'description' => $request->description,
             'email' => $request->email,
             'phone' => $request->phone,
@@ -106,7 +108,7 @@ class OrganisationController extends Controller
      */
     public function destroy(Organisation $organisation)
     {
-        $this->authorize('delete', $organisation);
+        Gate::authorize('delete', $organisation);
         
         $organisation->delete();
 
